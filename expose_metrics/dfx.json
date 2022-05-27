@@ -1,0 +1,15 @@
+{
+  "canisters": {
+    "expose_metrics": {
+      "main": "src/expose_metrics/main.mo",
+      "type": "motoko"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "0.0.0.0:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
