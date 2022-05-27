@@ -3,6 +3,8 @@ version: '3'
 services:
   canister:
     build: ./expose_metrics
+    ports:
+      - 8000:8000
     volumes:
       - prometheus-data:/prometheus
   prometheus:
