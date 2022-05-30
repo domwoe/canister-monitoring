@@ -6,13 +6,8 @@ rule_files:
   - alert.yml
 
 scrape_configs:
-  - job_name: services
+  - job_name: 'canister_metrics'
     metrics_path: /metrics
-    static_configs:
-      - targets:
-          - 'prometheus:9090'
-          - 'rrkah-fqaaa-aaaaa-aaaaq-cai.raw.ic0.app'
-  - job_name: 'dummy'  # This is a default value, it is mandatory.
     file_sd_configs:
       - files:
         - /prometheus/prometheus_target.json

@@ -4,7 +4,7 @@ services:
   canister:
     build: ./expose_metrics
     ports:
-      - 8000:8000
+      - 80:8000
     volumes:
       - prometheus-data:/prometheus
   prometheus:
@@ -14,6 +14,7 @@ services:
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus-data:/prometheus
-    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml --log.level=debug
+
 volumes:
   prometheus-data:
