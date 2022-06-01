@@ -1,6 +1,11 @@
 groups:
-  - name: DemoAlerts
+  - name: LowCycleAlert
     rules:
-      - alert: InstanceDown 
-        expr: up{job="services"} < 1 
-        for: 5m
+      - alert: LowCycles 
+        expr: balance < 100000000
+  - name: HeapAlmostFullAlert
+    rules:
+      - alert: HeapAt80Percent
+        expr: heap_size > 48828
+      - alert: HeapAt90Percent
+        expr: heap_size > 54931
