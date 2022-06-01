@@ -16,6 +16,9 @@ The Prometheus user interface will be available at `https://localhost:9000`.
 
 If you make changes run `docker compose build` before `docker compose up`.
 
+### Authorization
+This example uses an API key to control access to the metrics endpoint. 
+
 ## Troubleshooting
 
 If you're running this on a M1 Mac you might need to run `DOCKER_DEFAULT_PLATFORM=linux/amd64 docker-compose up`.
