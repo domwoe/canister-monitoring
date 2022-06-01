@@ -1,5 +1,7 @@
+import Array "mo:base/Array";
 import Cycles "mo:base/ExperimentalCycles";
 import Debug "mo:base/Debug";
+import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
 import Option "mo:base/Option";
@@ -23,16 +25,37 @@ actor ExposeMetrics {
     headers: [HeaderField];
     body: Blob;
   };
+
+  let permission_denied: HttpResponse = {
+    status_code = 403;
+    headers = [];
+    body = "";
+  };
+
+  let API_KEY = "MySecretKey";
   
   public query func http_request(req : HttpRequest) : async HttpResponse {
     // Strip query params and get only path
     let ?path = Text.split(req.url, #char '?').next();
     Debug.print(req.url);
     Debug.print(path);
+    Debug.print(debug_show(req.headers));
     switch (req.method, path) {
       // Endpoint that serves metrics to be consumed with Prometheseus
       case ("GET", "/metrics") {
         Debug.print("GET: /metrics");
+        
+        // Handle authz
+        let key = get_api_key(req.headers);
+        switch(key) {
+          case(null) return permission_denied;
+          case(?v) let key = v;
+        };
+        if (key != "Bearer " # API_KEY) {
+          return permission_denied;
+        };
+
+        // We'll arrive here only if authz was successful
         let m = metrics();
         Debug.print(m);
         {
@@ -50,6 +73,18 @@ actor ExposeMetrics {
         }
       };
     } 
+  };
+
+  // Returns the api key from the authz header
+  func get_api_key(headers: [HeaderField]) : ?Text {
+    let key = "";
+    let authz_header : ?HeaderField = Array.find(headers, func((header, val): (Text, Text)) : Bool { header == "authorization" });
+      switch authz_header {
+        case(null) null;
+        case(?header) {
+          ?header.1;
+        };
+      };
   };
 
   // Returns a set of metrics encoded in Prometheseus text-based exposition format
