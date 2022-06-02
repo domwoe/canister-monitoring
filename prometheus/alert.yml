@@ -3,9 +3,19 @@ groups:
     rules:
       - alert: LowCycles 
         expr: balance < 100000000
-  - name: HeapAlmostFullAlert
+    # Current max wasm memory size 4GB
+    # Sizes are given in 64KiB pages 
+  - name: WasmMemAlert
     rules:
-      - alert: HeapAt80Percent
-        expr: heap_size > 48828
-      - alert: HeapAt90Percent
-        expr: heap_size > 54931
+      - alert: WasmMemAt80Percent
+        expr: mem_size > 48828
+      - alert: WasmMemAt90Percent
+        expr: mem_size > 54931
+    # Current max stable memory size 8GB
+    # Sizes are given in 64KiB pages 
+  - name: StableMemAlert
+    rules:
+      - alert: StableMemAt80Percent
+        expr: mem_size > 97656
+      - alert: StableMemAt90Percent
+        expr: mem_size > 109863
