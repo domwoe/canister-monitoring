@@ -13,8 +13,11 @@ import Time "mo:base/Time";
 
 actor ExposeMetrics {
 
+  // The secret API key shared between Prometheus and this canister
+  // to authorize access to the metrics endpoint
   let API_KEY = "MySecretKey";
-  let REQUIRE_AUTHZ = false;
+  // API key is only checked if this flag is true
+  let REQUIRE_AUTHZ = true;
 
   type HeaderField = (Text, Text);
 
